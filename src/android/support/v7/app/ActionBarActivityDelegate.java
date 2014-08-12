@@ -44,7 +44,13 @@ abstract class ActionBarActivityDelegate {
     private static final String TAG = "ActionBarActivityDelegate";
 
     static ActionBarActivityDelegate createDelegate(ActionBarActivity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        String model = String.format("%s/%s", Build.DEVICE, Build.MODEL);
+
+        //it would be great if manufacturers didn't ship phones with incomplete android APIs...
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
+                && (model.equals("ha3g/SM-N900") || model.equals("hlte/SM-N9006"))) {
+            return new ActionBarActivityDelegateJB(activity);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return new ActionBarActivityDelegateJBMR2(activity);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             return new ActionBarActivityDelegateJB(activity);
